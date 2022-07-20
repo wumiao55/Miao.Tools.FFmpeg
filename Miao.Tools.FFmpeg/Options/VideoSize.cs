@@ -2,6 +2,11 @@
 {
     public class VideoSize
     {
+        /// <summary>
+        /// 构造方法
+        /// </summary>
+        /// <param name="widthPixel"></param>
+        /// <param name="heightPixel"></param>
         public VideoSize(int widthPixel, int heightPixel)
         {
             WidthPixel = widthPixel;

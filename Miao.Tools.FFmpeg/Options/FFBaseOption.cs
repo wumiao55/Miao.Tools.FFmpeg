@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 
 namespace Miao.Tools.FFmpeg.Options
@@ -23,6 +22,15 @@ namespace Miao.Tools.FFmpeg.Options
                 }
             }
             return string.Join(" ", list);
+        }
+
+        /// <summary>
+        /// 转为字符串
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return this.ToCommandArgs();
         }
     }
 }

@@ -29,6 +29,21 @@ namespace Miao.Tools.FFmpeg.Options
         /// </summary>
         public string BitRateArg { get; private set; }
 
+        /// <summary>
+        /// 视频位置参数
+        /// </summary>
+        public string PositionArg { get; private set; }
+
+        /// <summary>
+        /// 过滤器参数
+        /// </summary>
+        public string FiltergraphArg { get; private set; }
+
+        /// <summary>
+        /// 复杂过滤器参数
+        /// </summary>
+        public string ComplexFilterArg { get; private set; }
+
         #endregion
 
         #region set video options
@@ -40,6 +55,10 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public VideoOptions SetVideoCodecType(VideoCodecType value)
         {
+            /*
+             -vcodec codec (output):
+                Set the video codec. This is an alias for -codec:v
+             */
             VideoCodecArg = $"-vcodec {value}";
             return this;
         }
@@ -51,6 +70,13 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public VideoOptions SetSize(VideoSize value)
         {
+            /*
+             -s[:stream_specifier] size (input/output,per-stream):
+                Set frame size.
+                As an input option, this is a shortcut for the video_size private option, recognized by some demuxers for which the frame size is either not stored in the file or is configurable – e.g. raw video or video grabbers.
+                As an output option, this inserts the scale video filter to the end of the corresponding filtergraph. Please use the scale filter directly to insert it at the beginning or some other place.
+                The format is ‘wxh’ (default - same as source).
+             */
             SizeArg = $"-s {value.WidthPixel}x{value.HeightPixel}";
             return this;
         }
@@ -62,6 +88,12 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public VideoOptions SetRate(int value)
         {
+            /*
+             -r[:stream_specifier] fps (input/output,per-stream):
+                Set frame rate (Hz value, fraction or abbreviation).
+                As an input option, ignore any timestamps stored in the file and instead generate timestamps assuming constant frame rate fps. This is not the same as the -framerate option used for some input formats like image2 or v4l2 (it used to be the same in older versions of FFmpeg). If in doubt use -framerate instead of the input option -r.
+                As an output option, duplicate or drop input frames to achieve constant output frame rate fps.
+             */
             RateArg = $"-r {value}";
             return this;
         }
@@ -73,7 +105,60 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public VideoOptions SetBitRate(string value)
         {
+            /*
+             -vb rate:
+                Set bit rate of video
+             */
             BitRateArg = $"-vb {value}";
+            return this;
+        }
+
+        /// <summary>
+        /// 设置视频位置
+        /// </summary>
+        /// <param name="value">位置值,单位:秒</param>
+        /// <returns></returns>
+        public VideoOptions SetPosition(double value)
+        {
+            /*
+             -ss position (input/output):
+                When used as an input option (before -i), seeks in this input file to position. Note that in most formats it is not possible to seek exactly, so ffmpeg will seek to the closest seek point before position. When transcoding and -accurate_seek is enabled (the default), this extra segment between the seek point and position will be decoded and discarded. When doing stream copy or when -noaccurate_seek is used, it will be preserved.
+                When used as an output option (before an output url), decodes but discards input until the timestamps reach position.
+                position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
+             */
+            PositionArg = $"-ss {value}";
+            return this;
+        }
+
+        /// <summary>
+        /// 设置过滤器
+        /// </summary>
+        /// <param name="value">过滤器值</param>
+        /// <returns></returns>
+        public VideoOptions SetFiltergraph(string value)
+        {
+            /*
+             -vf filtergraph (output):
+                Create the filtergraph specified by filtergraph and use it to filter the stream.
+                This is an alias for -filter:v, see the -filter option.
+             */
+            FiltergraphArg = $"-vf \"{value}\"";
+            return this;
+        }
+
+        /// <summary>
+        /// 设置复杂过滤器
+        /// </summary>
+        /// <param name="value">复杂过滤器值</param>
+        /// <returns></returns>
+        public VideoOptions SetComplexFilter(string value)
+        {
+            /*
+             -filter_complex filtergraph (global):
+                Define a complex filtergraph, i.e. one with arbitrary number of inputs and/or outputs. For simple graphs – those with one input and one output of the same type – see the -filter options. 
+                filtergraph is a description of the filtergraph, as described in the “Filtergraph syntax” section of the ffmpeg-filters manual
+             */
+            ComplexFilterArg = $"-filter_complex \"{value}\"";
             return this;
         }
 

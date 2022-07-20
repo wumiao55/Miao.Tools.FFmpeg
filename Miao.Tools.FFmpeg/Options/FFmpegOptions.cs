@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Miao.Tools.FFmpeg.Options
 {
     public class FFmpegOptions : FFBaseOption
     {
         /// <summary>
-        /// 输入文件
+        /// 输入文件集合
         /// </summary>
-        private readonly string _inputFile;
+        private readonly List<string> _inputFiles;
 
         /// <summary>
         /// 输出文件
@@ -44,6 +45,30 @@ namespace Miao.Tools.FFmpeg.Options
         /// <summary>
         /// 构造方法
         /// </summary>
+        /// <param name="inputFiles">多个输入文件</param>
+        /// <param name="outputFile">输出文件</param>
+        public FFmpegOptions(List<string> inputFiles, string outputFile)
+        {
+            foreach (var inputFile in inputFiles)
+            {
+                if (!File.Exists(inputFile))
+                {
+                    throw new FileNotFoundException("输入文件不存在", Path.GetFullPath(inputFile));
+                }
+            }
+            if (string.IsNullOrEmpty(outputFile))
+            {
+                throw new ArgumentException("输出项为空", nameof(outputFile));
+            }
+            _inputFiles = inputFiles;
+            _outputFile = outputFile;
+            _inputArg = GenerateInputArg(_inputFiles.ToArray());
+            _outputArg = $"\"{outputFile}\"";
+        }
+
+        /// <summary>
+        /// 构造方法
+        /// </summary>
         /// <param name="inputFile">输入文件</param>
         /// <param name="outputFile">输出文件</param>
         /// <exception cref="ArgumentException"></exception>
@@ -53,17 +78,17 @@ namespace Miao.Tools.FFmpeg.Options
             {
                 throw new ArgumentException("输入项为空", nameof(inputFile));
             }
-            if (string.IsNullOrEmpty(outputFile))
-            {
-                throw new ArgumentException("输出项为空", nameof(outputFile));
-            }
             if (!File.Exists(inputFile))
             {
                 throw new FileNotFoundException("输入文件不存在", Path.GetFullPath(inputFile));
             }
-            _inputFile = inputFile;
+            if (string.IsNullOrEmpty(outputFile))
+            {
+                throw new ArgumentException("输出项为空", nameof(outputFile));
+            }
+            _inputFiles = new List<string>() { inputFile };
             _outputFile = outputFile;
-            _inputArg = $"-i \"{inputFile}\"";
+            _inputArg = GenerateInputArg(_inputFiles.ToArray());
             _outputArg = $"\"{outputFile}\"";
         }
 
@@ -109,7 +134,7 @@ namespace Miao.Tools.FFmpeg.Options
             var list = new List<string>();
             if (_isCover)
             {
-                _inputArg = $"-y -i \"{_inputFile}\"";
+                _inputArg = $"-y {_inputArg}";
             }
             list.Add(_inputArg);
             if (!string.IsNullOrEmpty(audioCommandArgs))
@@ -122,6 +147,18 @@ namespace Miao.Tools.FFmpeg.Options
             }
             list.Add(_outputArg);
             return string.Join(" ", list);
+        }
+
+        /// <summary>
+        /// 生成输入参数
+        /// </summary>
+        /// <param name="inputFiles"></param>
+        /// <returns></returns>
+        private static string GenerateInputArg(params string[] inputFiles)
+        {
+            // -i input1.mp4 -i input2.png
+            var inputItems = inputFiles.Select(input => $"-i \"{input}\"");
+            return string.Join(" ", inputItems);
         }
 
     }

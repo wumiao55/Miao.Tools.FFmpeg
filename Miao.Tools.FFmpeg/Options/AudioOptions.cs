@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Miao.Tools.FFmpeg.Enums;
+﻿using Miao.Tools.FFmpeg.Enums;
 
 namespace Miao.Tools.FFmpeg.Options
 {
@@ -42,6 +40,10 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public AudioOptions SetAudioCodecType(AudioCodecType value)
         {
+            /*
+            -acodec codec(input / output):
+                Set the audio codec. This is an alias for -codec:a.
+            */
             AudioCodecArg = $"-acodec {value}";
             return this;
         }
@@ -53,6 +55,12 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public AudioOptions SetSamplingFrequency(int value)
         {
+            /*
+             -ar[:stream_specifier] freq (input/output,per-stream):
+                Set the audio sampling frequency. 
+                For output streams it is set by default to the frequency of the corresponding input stream. 
+                For input streams this option only makes sense for audio grabbing devices and raw demuxers and is mapped to the corresponding demuxer options.
+             */
             SamplingFrequencyArg = $"-ar {value}";
             return this;
         }
@@ -64,6 +72,12 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public AudioOptions SetChannels(AudioChannelsType value)
         {
+            /*
+             -ac[:stream_specifier] channels (input/output,per-stream):
+                Set the number of audio channels. \
+                For output streams it is set by default to the number of input audio channels. 
+                For input streams this option only makes sense for audio grabbing devices and raw demuxers and is mapped to the corresponding demuxer options.
+             */
             ChannelsArg = $"-ac {(int)value}";
             return this;
         }
@@ -75,6 +89,10 @@ namespace Miao.Tools.FFmpeg.Options
         /// <returns></returns>
         public AudioOptions SetBitRate(string value)
         {
+            /*
+             -ab rate:
+                Set bit rate of audio
+             */
             BitRateArg = $"-ab {value}";
             return this;
         }

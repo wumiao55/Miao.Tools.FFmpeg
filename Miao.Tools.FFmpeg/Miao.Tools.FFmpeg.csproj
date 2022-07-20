@@ -1,31 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <Description>提供FFmpeg转换帮助类: FFmpegUtil</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <Resource Include="Files\input.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Miao.Core" Version="3.1.39" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Files\input.mp4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Tools\ffmpeg.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Files\" />
+    <PackageReference Include="Miao.Core" Version="3.2.2" />
   </ItemGroup>
 
 </Project>
