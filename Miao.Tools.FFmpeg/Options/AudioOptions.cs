@@ -51,9 +51,9 @@ namespace Miao.Tools.FFmpeg.Options
         /// <summary>
         /// 设置音频采样率
         /// </summary>
-        /// <param name="value">采样率, 如: 44100</param>
+        /// <param name="value">采样率</param>
         /// <returns></returns>
-        public AudioOptions SetSamplingFrequency(int value)
+        public AudioOptions SetSamplingFrequency(AudioSamplingFrequency value)
         {
             /*
              -ar[:stream_specifier] freq (input/output,per-stream):
@@ -61,7 +61,7 @@ namespace Miao.Tools.FFmpeg.Options
                 For output streams it is set by default to the frequency of the corresponding input stream. 
                 For input streams this option only makes sense for audio grabbing devices and raw demuxers and is mapped to the corresponding demuxer options.
              */
-            SamplingFrequencyArg = $"-ar {value}";
+            SamplingFrequencyArg = $"-ar {(int)value}";
             return this;
         }
 

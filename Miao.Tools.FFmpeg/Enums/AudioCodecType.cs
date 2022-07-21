@@ -1,7 +1,11 @@
 ﻿namespace Miao.Tools.FFmpeg.Enums
 {
+    /// <summary>
+    /// 音频编码类型
+    /// </summary>
     public enum AudioCodecType
     {
+        copy,
         aac,
         libfaac,
         ac3,
@@ -62,6 +66,5 @@
         wavpack,
         wmav1,
         wmav2,
-        copy,
     }
 }

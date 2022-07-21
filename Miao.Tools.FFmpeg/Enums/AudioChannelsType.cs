@@ -1,5 +1,8 @@
 ﻿namespace Miao.Tools.FFmpeg.Enums
 {
+    /// <summary>
+    /// 音频声道类型
+    /// </summary>
     public enum AudioChannelsType
     {
         /// <summary>

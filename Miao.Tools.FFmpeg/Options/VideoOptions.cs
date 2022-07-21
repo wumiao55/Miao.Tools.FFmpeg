@@ -32,7 +32,12 @@ namespace Miao.Tools.FFmpeg.Options
         /// <summary>
         /// 视频位置参数
         /// </summary>
-        public string PositionArg { get; private set; }
+        public string SeekPositionArg { get; private set; }
+
+        /// <summary>
+        /// 视频结束位置参数
+        /// </summary>
+        public string ToPositionArg { get; private set; }
 
         /// <summary>
         /// 过滤器参数
@@ -118,7 +123,7 @@ namespace Miao.Tools.FFmpeg.Options
         /// </summary>
         /// <param name="value">位置值,单位:秒</param>
         /// <returns></returns>
-        public VideoOptions SetPosition(double value)
+        public VideoOptions SetSeekPosition(double value)
         {
             /*
              -ss position (input/output):
@@ -126,7 +131,24 @@ namespace Miao.Tools.FFmpeg.Options
                 When used as an output option (before an output url), decodes but discards input until the timestamps reach position.
                 position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
              */
-            PositionArg = $"-ss {value}";
+            SeekPositionArg = $"-ss {value}";
+            return this;
+        }
+
+        /// <summary>
+        /// 设置视频结束位置
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public VideoOptions SetToPosition(double value)
+        {
+            /*
+             -ss position (input/output):
+                When used as an input option (before -i), seeks in this input file to position. Note that in most formats it is not possible to seek exactly, so ffmpeg will seek to the closest seek point before position. When transcoding and -accurate_seek is enabled (the default), this extra segment between the seek point and position will be decoded and discarded. When doing stream copy or when -noaccurate_seek is used, it will be preserved.
+                When used as an output option (before an output url), decodes but discards input until the timestamps reach position.
+                position must be a time duration specification, see (ffmpeg-utils)the Time duration section in the ffmpeg-utils(1) manual.
+             */
+            ToPositionArg = $"-to {value}";
             return this;
         }
 

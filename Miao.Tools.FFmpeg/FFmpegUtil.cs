@@ -12,6 +12,11 @@ namespace Miao.Tools.FFmpeg
     public class FFmpegUtil
     {
         /// <summary>
+        /// 是否使用原始命令行参数
+        /// </summary>
+        private readonly bool _useRawCommandArgs;
+
+        /// <summary>
         /// 构造方法
         /// </summary>
         /// <param name="ffmpegPath"></param>
@@ -28,6 +33,27 @@ namespace Miao.Tools.FFmpeg
         }
 
         /// <summary>
+        /// 构造方法
+        /// </summary>
+        /// <param name="ffmpegPath"></param>
+        /// <param name="rawCommandArgs"></param>
+        /// <exception cref="FileNotFoundException"></exception>
+        public FFmpegUtil(string ffmpegPath, string rawCommandArgs)
+        {
+            if (!File.Exists(ffmpegPath))
+            {
+                throw new FileNotFoundException("the ffmpeg file is not exist", ffmpegPath);
+            }
+            if (string.IsNullOrEmpty(rawCommandArgs))
+            {
+                throw new ArgumentException("命令行参数为空", nameof(rawCommandArgs));
+            }
+            this.FFmpegPath = ffmpegPath;
+            this.RawCommandArgs = rawCommandArgs;
+            this._useRawCommandArgs = true;
+        }
+
+        /// <summary>
         /// FFmpeg.exe程序路径
         /// </summary>
         public string FFmpegPath { get; private set; }
@@ -35,7 +61,12 @@ namespace Miao.Tools.FFmpeg
         /// <summary>
         /// FFmpeg设置
         /// </summary>
-        public FFmpegOptions Options { get; private set; }
+        public FFmpegOptions Options { get; private init; }
+
+        /// <summary>
+        /// 原始命令行参数
+        /// </summary>
+        public string RawCommandArgs { get; private init; }
 
         /// <summary>
         /// 输出数据接收处理程序
@@ -78,11 +109,20 @@ namespace Miao.Tools.FFmpeg
         /// <summary>
         /// 执行操作
         /// </summary>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<TransferResult> ExecuteAsync(CancellationToken cancellationToken = default)
         {
             // ffmpeg.exe -i input.mp4 output.avi
-            string commandArguments = Options.ToCommandArgs();
+            string commandArguments;
+            if (_useRawCommandArgs)
+            {
+                commandArguments = RawCommandArgs;
+            }
+            else
+            {
+                commandArguments = Options.ToCommandArgs();
+            }
             Console.WriteLine("ffmpeg arguments:" + commandArguments);
             using var processUtil = new ProcessUtil(FFmpegPath);
             processUtil.SetArguments(commandArguments);
