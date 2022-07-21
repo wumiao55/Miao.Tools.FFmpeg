@@ -49,6 +49,11 @@ namespace Miao.Tools.FFmpeg.Options
         /// </summary>
         public string ComplexFilterArg { get; private set; }
 
+        /// <summary>
+        /// 无视频参数
+        /// </summary>
+        public string NoVideoArg { get; private set; }
+
         #endregion
 
         #region set video options
@@ -181,6 +186,21 @@ namespace Miao.Tools.FFmpeg.Options
                 filtergraph is a description of the filtergraph, as described in the “Filtergraph syntax” section of the ffmpeg-filters manual
              */
             ComplexFilterArg = $"-filter_complex \"{value}\"";
+            return this;
+        }
+
+        /// <summary>
+        /// 设置无视频
+        /// </summary>
+        /// <returns></returns>
+        public VideoOptions SetNoVideo()
+        {
+            /*
+            -vn (input/output):
+                As an input option, blocks all video streams of a file from being filtered or being automatically selected or mapped for any output. See -discard option to disable streams individually.
+                As an output option, disables video recording i.e. automatic selection or mapping of any video stream. For full manual control see the -map option. 
+             */
+            NoVideoArg = "-vn";
             return this;
         }
 

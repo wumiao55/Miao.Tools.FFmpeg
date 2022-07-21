@@ -29,6 +29,11 @@ namespace Miao.Tools.FFmpeg.Options
         /// </summary>
         public string BitRateArg { get; private set; }
 
+        /// <summary>
+        /// 无音频参数
+        /// </summary>
+        public string NoAudioArg { get; private set; }
+
         #endregion
 
         #region set audio options
@@ -94,6 +99,21 @@ namespace Miao.Tools.FFmpeg.Options
                 Set bit rate of audio
              */
             BitRateArg = $"-ab {value}";
+            return this;
+        }
+
+        /// <summary>
+        /// 设置无音频
+        /// </summary>
+        /// <returns></returns>
+        public AudioOptions SetNoAudio()
+        {
+            /*
+             -an (input/output):
+                As an input option, blocks all audio streams of a file from being filtered or being automatically selected or mapped for any output. See -discard option to disable streams individually.
+                As an output option, disables audio recording i.e. automatic selection or mapping of any audio stream. For full manual control see the -map option.
+             */
+            NoAudioArg = "-an";
             return this;
         }
 
